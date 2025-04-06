@@ -1,0 +1,11 @@
+% If you want to list ALL entries from the .bib file, uncomment \nocite{*}
+\nocite{*}
+
+% Use normal (roman) font for URLs instead of typewriter
+\urlstyle{rm}
+\phantomsection\pagebreak% исправляет нумерацию в документе и исправляет гиперссылки в pdf
+
+% Use your custom Belarus-specific BibTeX style
+\bibliographystyle{./biblio/belarus-specific-utf8gost780u.bst}
+% Specify your .bib file (no .bib extension needed)
+\bibliography{./biblio/othercites.bib}
