@@ -1,2 +1,10 @@
 .venv
+.vscode
+.*
 datasets
+*.pickle
+*.log
+embeddings.pickle
+.env
+__pycache__
+
