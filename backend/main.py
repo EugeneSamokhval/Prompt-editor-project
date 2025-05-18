@@ -25,15 +25,17 @@ async def rate_prompt(prompt: str, model: InputTypes):
 @app.get('/preview-image')
 async def get_image_preview(prompt: str):
     image_gen_api = FusionBrainAPI()
-    pipeline_id = image_gen_api.get_pipeline()
+    pipeline_id =  image_gen_api.get_pipeline()
     uuid = image_gen_api.generate(prompt, pipeline_id)
     files = image_gen_api.check_generation(uuid)
+    while not files:
+        files = image_gen_api.check_generation(uuid)
     return StreamingResponse(content=files, media_type='image/jpeg')
     
 @app.get('/preview-text')
 async def get_text_preview(prompt: str):
     llama_service = LlamaTestService()
-    response_message = llama_service.test_prompt(prompt=prompt)
+    response_message = await llama_service.test_prompt(prompt=prompt)
     return response_message
 
 origins = [

@@ -86,7 +86,9 @@ with Session(engine) as session:
 
         for start in tqdm(range(0, len(rows), BATCH), desc=str(p)):
             subset = rows[start:start + BATCH]
-            session.execute(stmt, subset)             
-        session.commit()  
-
+            session.execute(stmt, subset)
+            print(start, str(p))
+                         
+        session.commit()
+        print("Loaded chunk:", stem)
 print("✅  All chunks ingested!")

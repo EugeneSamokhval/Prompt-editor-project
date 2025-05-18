@@ -21,7 +21,7 @@ class FusionBrainAPI:
         data = response.json()
         return data[0]['id']
 
-    def generate(self, prompt, pipeline, images=1, width=1024, height=1024):
+    def generate(self, prompt, pipeline, images=1, width=512, height=512):
         params = {
             "type": "GENERATE",
             "numImages": images,

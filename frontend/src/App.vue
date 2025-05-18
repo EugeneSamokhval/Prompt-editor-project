@@ -26,11 +26,18 @@ import { RouterLink, RouterView } from 'vue-router'
   display: grid;
   grid-template-columns: 200px 200px;
   grid-template-rows: 1fr;
-  gap: 10px;
+  background-color: $alt-background-color;
 }
 .nav-buttons-layout__nav-button{
   background-color: $secondary-color;
   color: $background-color;
+  font-size: 18px;
+  font-weight: 800;
+  text-decoration: none;
+  border: 2px solid $text-color;
+  text-align: center;
+  height: 25px;
+  margin-top: 10px;
 }
 .active{
   background-color: $main-color;
@@ -42,7 +49,7 @@ import { RouterLink, RouterView } from 'vue-router'
   align-items: center;
   justify-items: center;
   width: 100%;
-  height: 100vh;
-
+  height: calc(100vh - 35px);
+  overflow: hidden;
 }
 </style>
