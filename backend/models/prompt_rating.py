@@ -51,10 +51,10 @@ class PromptRatingHandler:
         self.prompt_tokenizer = PromptTokenizer()
 
     def calculate(self, prompt: str, ai_type: InputTypes = InputTypes.FALLBACK):
+        print(prompt)
         weighted_max_words = self.MAX_WORDS_WEIGHTED.get(ai_type)
         number_of_tokens = len(word_tokenize(prompt))
         tokenized_prompt = self.prompt_tokenizer.tokenize_prompt(prompt)
-        print(tokenized_prompt)
         rating = 0
         all_max_tokens = sum(weighted_max_words.values())
         for key in weighted_max_words.keys():
@@ -64,6 +64,7 @@ class PromptRatingHandler:
             else:
                 rating+= (2 * weighted_max_words.get(key) /all_max_tokens ) - (number_of_current_type_entries /number_of_tokens)
         rating = rating * ( 2 * number_of_tokens/ all_max_tokens)
+        print(rating)
         return math.ceil((rating) * 1000)
 
 
