@@ -5,8 +5,11 @@ import type { PromptStructure } from '@/types/promptStructure.d'
 import { ModelTypes } from '@/types/possibleModelTypes.d'
 import { testPrompt } from '@/utls/api-requests/testPrompt'
 import { ratePrompt } from '@/utls/api-requests/ratePrompt'
-const textPreview = ref('')
-const imagePreview = ref<string>('')
+import { improvePrompt } from '@/utls/api-requests/improvePrompt'
+import {slugify} from '@/utls/slugify'
+import { marked } from 'marked'
+
+const history = ref<Array<{ text: str; image: str }>>([])
 const inputText = ref('')
 const ratingText = ref(0)
 const model = ref<ModelTypes>(ModelTypes.FALLBACK)
@@ -15,23 +18,25 @@ const tokenized = ref<PromptStructure | null>()
 type SectionKey = keyof PromptStructure //  convenience alias
 
 const handleTokenization = async () => {
-  const data = await tokenizePrompt(inputText.value)
+  const data = await tokenizePrompt(slugify(inputText.value))
   tokenized.value = data
 }
 const handleTest = async () => {
-  const response_preview = await testPrompt(inputText.value, model.value)
-  console.log(response_preview)
-  imagePreview.value = response_preview?.image || ''
-  textPreview.value = response_preview?.text || ''
+  const response_preview = await testPrompt(slugify(inputText.value), model.value)
+  history.value.push({text: marked(response_preview?.text || '') , image: response_preview?.image || ''})
+}
+
+const handleImprovePrompt = async () => {
+  const improvedPrompt = await improvePrompt(slugify(inputText.value))
+  history.value.push({text:marked(improvedPrompt), image: ''})
 }
 
 const handleRating = async () => {
-  const rating = await ratePrompt(inputText.value, model.value)
+  const rating = await ratePrompt(slugify(inputText.value), model.value)
   ratingText.value = rating
 }
 // Drag an drop code
 function onDragStart(e: DragEvent, section: SectionKey, index: number) {
-  console.log('Dragging')
   if (e.dataTransfer) {
     e.dataTransfer.setData('text/plain', `${section}|${index}`)
     e.dataTransfer.effectAllowed = 'move'
@@ -40,14 +45,12 @@ function onDragStart(e: DragEvent, section: SectionKey, index: number) {
 
 /** Allow the item we’re hovering over to accept a drop */
 function onDragOver(e: DragEvent) {
-  console.log('Dragging over')
   e.preventDefault() // ← **critical**: makes it droppable
   e.dataTransfer!.dropEffect = 'move'
 }
 
 /** Re-insert the dragged phrase at its new position */
 function onDrop(e: DragEvent, section: SectionKey, dropIndex: number) {
-  console.log('Dropping')
   e.preventDefault()
 
   // Pull the origin we stashed in onDragStart()
@@ -83,7 +86,7 @@ function connectPrompt() {
 
 <template>
   <div class="home-page">
-    <div>
+    <div class="home-page__input-box">
       <textarea class="home-page__text-input" v-model="inputText"></textarea>
       <div class="home-page__buttons-box">
         <select class="simple-button" v-model="model">
@@ -92,6 +95,7 @@ function connectPrompt() {
         <button class="simple-button" @click="handleTokenization">Tokenize prompt</button>
         <button class="simple-button" @click="handleTest">Test prompt</button>
         <button class="simple-button" @click="handleRating">Rate prompt</button>
+        <button class="simple-button" @click="handleImprovePrompt">Improve prompt</button>
       </div>
       <div v-if="tokenized" class="home-page__result-output-field">
         <template v-for="(list, section) in tokenized" :key="section">
@@ -113,8 +117,12 @@ function connectPrompt() {
     </div>
     <div class="home-page__output-box">
       <p class="output-box__prompt-rating" :ratingText>Current prompt rating:{{ ratingText }}</p>
-      <img :imagePreview alt="Generated image" v-if="imagePreview.length > 0" :src="imagePreview" />
-      <p :textPreview v-if="textPreview.length > 0" v-text="textPreview"></p>
+      <template :history v-for="item in history">
+        <img
+          :src="item.image"
+        />
+        <p v-html="item.text"></p>
+      </template>
     </div>
   </div>
 </template>
@@ -125,7 +133,7 @@ function connectPrompt() {
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 60px;
   gap: 20px;
- height: calc(100vh - 45px);
+  height: calc(100vh - 45px);
   width: 100vw;
   padding: 20px;
 }
@@ -185,5 +193,9 @@ function connectPrompt() {
   font-weight: 700;
   border-radius: 1234px;
   padding: 4px;
+}
+.home-page__input-box{
+  max-height: 900px;
+  overflow: auto;
 }
 </style>

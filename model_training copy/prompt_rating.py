@@ -1,6 +1,6 @@
 import nltk
 import math
-from models.prompts_tokenizer import PromptTokenizer
+from prompts_tokenizer import PromptTokenizer
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from enum import Enum

@@ -4,6 +4,21 @@
 \usepackage[14pt]{extsizes}
 \usepackage[english, russian]{babel}
 \usepackage{multicol}
+\usepackage{listings}
+\lstset{
+  language=C,
+  basicstyle=\footnotesize\ttfamily,
+  numbers=left,        % line numbers
+  numberstyle=\tiny,
+  stepnumber=1,
+  numbersep=5pt,
+  showstringspaces=false,
+  breaklines=true,
+  frame=single,
+  captionpos=b,
+  inputencoding=utf8,        % or cp1251
+  extendedchars=true
+}
 \usepackage{multirow}
 \usepackage{setspace}
 %\usepackage{pscyr} 
@@ -255,7 +270,7 @@
 \usepackage{xcolor}
 \usepackage{minted}
 
-%\AtBeginDocument{\numberwithin{lstlisting}{section}}
+\AtBeginDocument{\numberwithin{lstlisting}{section}}
 
 \usepackage[normalem]{ulem}
 
