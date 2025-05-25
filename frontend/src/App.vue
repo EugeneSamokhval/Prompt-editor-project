@@ -8,6 +8,8 @@ import { RouterLink, RouterView } from 'vue-router'
       <nav class="wrapper__nav-buttons-layout">
         <RouterLink class="nav-buttons-layout__nav-button" :class="{'active':$route.name === 'home'}" to="/">Home</RouterLink>
         <RouterLink class="nav-buttons-layout__nav-button" :class="{'active':$route.name === 'register'}" to="/registration">Registration</RouterLink>
+        <RouterLink class="nav-buttons-layout__nav-button" :class="{'active':$route.name === 'login'}" to="/login">Login</RouterLink>
+
       </nav>
     </div>
   </header>
@@ -24,7 +26,7 @@ import { RouterLink, RouterView } from 'vue-router'
 }
 .wrapper__nav-buttons-layout{
   display: grid;
-  grid-template-columns: 200px 200px;
+  grid-template-columns: 200px 200px 200px;
   grid-template-rows: 1fr;
   background-color: $alt-background-color;
 }
