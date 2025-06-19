@@ -1,0 +1,21 @@
+
+$main-color: #ff6400;
+$secondary-color: #009bff;
+$text-color: #000000;
+$background-color: #FFFFFF;
+$shadowed-background-color: #CCCCCC;
+$alt-background-color: #EEEEEE;
+$danger-color: #f11d1d;
+$success-color: #9bff7d;
+
+.simple-button{
+  background-color: $main-color;
+  border-radius: 15px;
+  border: 2px solid $background-color;
+  font-weight: 700;
+  font-size: 14px;
+  color:$background-color ;
+}
+.simple-button:hover{
+  box-shadow: 0px 0px 4px 1px $text-color;
+}
